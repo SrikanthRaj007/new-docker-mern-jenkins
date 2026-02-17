@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_COMPOSE = "docker-compose"
+        DOCKER_COMPOSE = "docker compose"
         PROJECT_NAME = "mern-tutorial"
     }
 
