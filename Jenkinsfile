@@ -1,47 +1,29 @@
 pipeline {
     agent any
 
-    environment {
-        DOCKER_COMPOSE = "docker-compose"
-        PROJECT_NAME = "mern-tutorial"
-    }
-
     stages {
-
-        stage('Clean Workspace') {
-            steps {
-                cleanWs()
-            }
-        }
-
-        stage('Clone Repository') {
-            steps {
-                git branch: 'main', 
-                    url: 'https://github.com/SrikanthRaj007/docker-jenkins-mern.git'
-            }
-        }
 
         stage('Build Docker Images') {
             steps {
-                sh "${DOCKER_COMPOSE} build"
+                dir("mern-tutorial") {
+                    sh "docker-compose build"
+                }
             }
         }
 
         stage('Stop Old Containers') {
             steps {
-                sh "${DOCKER_COMPOSE} down"
+                dir("mern-tutorial") {
+                    sh "docker-compose down"
+                }
             }
         }
 
         stage('Start Containers') {
             steps {
-                sh "${DOCKER_COMPOSE} up -d"
-            }
-        }
-
-        stage('Remove Unused Docker Images') {
-            steps {
-                sh "docker image prune -f"
+                dir("mern-tutorial") {
+                    sh "docker-compose up -d"
+                }
             }
         }
     }
