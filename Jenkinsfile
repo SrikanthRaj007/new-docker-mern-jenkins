@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        COMPOSE_CMD = "docker compose"   // use this if docker-compose not available
+        COMPOSE_CMD = "docker-compose"   // use this if docker-compose not available
         PROJECT_DIR = "mern-tutorial"
     }
 
