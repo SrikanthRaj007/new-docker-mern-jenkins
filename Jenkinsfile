@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        COMPOSE_CMD = "docker-compose"   // use this if docker-compose not available
+        COMPOSE_CMD = "docker-compose"
         PROJECT_DIR = "mern-tutorial"
     }
 
@@ -14,31 +14,16 @@ pipeline {
             }
         }
 
-        stage('Build Docker Images') {
+        stage('Build & Deploy') {
             steps {
                 dir("${PROJECT_DIR}") {
-                    sh "${COMPOSE_CMD} build"
+                    sh "${COMPOSE_CMD} down || true"
+                    sh "${COMPOSE_CMD} up -d --build"
                 }
             }
         }
 
-        stage('Stop Old Containers') {
-            steps {
-                dir("${PROJECT_DIR}") {
-                    sh "${COMPOSE_CMD} down"
-                }
-            }
-        }
-
-        stage('Start Containers') {
-            steps {
-                dir("${PROJECT_DIR}") {
-                    sh "${COMPOSE_CMD} up -d"
-                }
-            }
-        }
-
-        stage('Remove Unused Images') {
+        stage('Cleanup Images') {
             steps {
                 sh "docker image prune -f"
             }
