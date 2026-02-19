@@ -3,7 +3,7 @@ FROM jenkins/jenkins:lts
 USER root
 
 RUN apt-get update && \
-    apt-get install -y docker.io docker compose && \
+    apt-get install -y docker.io docker-compose && \
     apt-get clean
 
 RUN usermod -aG docker jenkins
