@@ -1,29 +1,46 @@
 pipeline {
     agent any
 
+    environment {
+        COMPOSE_CMD = "docker compose"   // use this if docker-compose not available
+        PROJECT_DIR = "mern-tutorial"
+    }
+
     stages {
+
+        stage('Checkout Code') {
+            steps {
+                checkout scm
+            }
+        }
 
         stage('Build Docker Images') {
             steps {
-                dir("mern-tutorial") {
-                    sh "docker-compose build"
+                dir("${PROJECT_DIR}") {
+                    sh "${COMPOSE_CMD} build"
                 }
             }
         }
 
         stage('Stop Old Containers') {
             steps {
-                dir("mern-tutorial") {
-                    sh "docker-compose down"
+                dir("${PROJECT_DIR}") {
+                    sh "${COMPOSE_CMD} down"
                 }
             }
         }
 
         stage('Start Containers') {
             steps {
-                dir("mern-tutorial") {
-                    sh "docker-compose up -d"
+                dir("${PROJECT_DIR}") {
+                    sh "${COMPOSE_CMD} up -d"
                 }
+            }
+        }
+
+        stage('Remove Unused Images') {
+            steps {
+                sh "docker image prune -f"
             }
         }
     }
